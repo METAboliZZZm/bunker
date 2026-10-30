@@ -418,7 +418,7 @@ const ACTIONS = {
   },
   start(s, me) {
     needHost(s, me); needPhase(s, 'lobby');
-    if (s.players.length < 3) throw bad('Нужно хотя бы 3 игрока');
+    if (s.players.length < 2) throw bad('Нужно хотя бы 2 игрока');
     deal(s);
     log(s, `Катастрофа: ${s.world.cat.title}. Мест в бункере: ${s.places} из ${s.players.length}`);
   },

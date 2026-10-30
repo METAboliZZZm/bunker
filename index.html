@@ -350,7 +350,8 @@ const H = {
   kick(d) { if (confirm(`Убрать ${pname(d.id)} из комнаты?`)) act('kick', { target: d.id }); },
   start() {
     const n = S.st.players.length;
-    if (n < 6 && !confirm(`Игроков ${n}. Интереснее всего играть от 6 человек. Начать всё равно?`)) return;
+    if (n === 2 && !confirm('Вдвоём получится только проверить, как всё работает: в бункер попадёт один. Начать?')) return;
+    if (n > 2 && n < 6 && !confirm(`Игроков ${n}. Интереснее всего играть от 6 человек. Начать всё равно?`)) return;
     act('start');
   },
   reveal(d) { if (confirm(`Открыть ${ACC[d.k]} для всех?`)) act('reveal', { key: d.k }); },
@@ -480,8 +481,8 @@ function vLobby(st) {
     ${host ? `<h2 class="sec-h">Настройки</h2>
       <p style="margin-bottom:8px">Ориентация в карте биологии</p>
       <div class="seg"><button class="${orient ? 'on' : ''}" data-a="orient" data-v="1">Показывать</button><button class="${orient ? '' : 'on'}" data-a="orient" data-v="0">Скрыть</button></div>
-      <div style="margin-top:26px"><button class="btn" data-a="start" ${st.players.length < 3 ? 'disabled' : ''}>Начать игру</button>
-      <p class="hint">Пока игра не началась, можно заходить. Интереснее всего от 6 человек.</p></div>`
+      <div style="margin-top:26px"><button class="btn" data-a="start" ${st.players.length < 2 ? 'disabled' : ''}>Начать игру</button>
+      <p class="hint">${st.players.length < 2 ? 'Чтобы начать, нужен хотя бы ещё один игрок.' : 'Пока игра не началась, можно заходить. Интереснее всего от 6 человек.'}</p></div>`
     : `<p class="hint" style="margin-top:20px">Ведущий начнёт игру, когда все соберутся.</p>`}
   ${footer()}</main>`;
 }

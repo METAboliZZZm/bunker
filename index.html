@@ -80,11 +80,12 @@ select{width:100%;font:16px "Helvetica Neue",Helvetica,Arial,sans-serif;border:1
 .seg button.on{background:var(--fg);color:var(--bg)}
 
 /* главная */
-.logo{margin:36px 0 20px;line-height:0}
+.logo{margin:36px 0 26px;line-height:0}
 /* каждая строка растянута ровно на ширину колонки и чуть сжата по горизонтали */
 .logo svg{display:block;width:100%;height:auto;overflow:visible}
 .logo text{fill:var(--fg);font-family:"Helvetica Neue",Helvetica,Arial,sans-serif;font-weight:700;font-size:200px}
-.lead{font-size:20px;line-height:1.3;margin:0 0 6px}
+.lead{font-size:20px;line-height:1.35;margin:0 0 14px}
+.lead-b{font-weight:700}
 .home section{margin-top:34px}
 .home h2{font-size:26px;margin-bottom:14px}
 .rules{padding-left:20px;margin:0}
@@ -388,21 +389,22 @@ document.addEventListener('keydown', (e) => {
 document.addEventListener('visibilitychange', () => { if (!document.hidden) { S.idle = 0; poll(); } });
 
 /* ---------- отрисовка ---------- */
-// Заголовок: одинаковый кегль у обеих строк, длинная строка ровно во всю ширину,
-// короткая добирает ширину разрядкой. Буквы не растягиваются.
+// Заголовок: каждая строка пропорционально масштабируется ровно на ширину колонки.
+// Буквы и расстояния между ними не меняются, поэтому строки получаются разного кегля.
 function fitLogo() {
   const svg = document.getElementById('logo');
   if (!svg) return;
-  const [a, b] = svg.querySelectorAll('text');
-  for (const t of [a, b]) { t.style.fontSize = '200px'; t.removeAttribute('textLength'); t.removeAttribute('lengthAdjust'); }
-  const wa = a.getComputedTextLength(), wb = b.getComputedTextLength();
-  if (!wa || !wb) return;
-  const fs = 200 * 1000 / Math.max(wa, wb);
-  const cap = fs * 0.72, gap = fs * 0.14;
-  for (const t of [a, b]) { t.style.fontSize = fs + 'px'; t.setAttribute('textLength', 1000); t.setAttribute('lengthAdjust', 'spacing'); }
-  a.setAttribute('y', cap);
-  b.setAttribute('y', cap * 2 + gap);
-  svg.setAttribute('viewBox', `0 0 1000 ${cap * 2 + gap}`);
+  let y = 0;
+  svg.querySelectorAll('text').forEach((t, i) => {
+    t.style.fontSize = '200px';
+    const w = t.getComputedTextLength();
+    if (!w) return;
+    const fs = 200 * 1000 / w, cap = fs * 0.72;
+    y += (i ? cap * 0.16 : 0) + cap;
+    t.style.fontSize = fs + 'px';
+    t.setAttribute('y', y);
+  });
+  if (y) svg.setAttribute('viewBox', `0 0 1000 ${y}`);
 }
 
 function render() {
@@ -442,7 +444,8 @@ function vHome() {
     <h1 class="logo" aria-label="WEAREABLE BOONKER!">
       <svg id="logo" viewBox="0 0 1000 300" aria-hidden="true"><text x="0" y="140">WEAREABLE</text><text x="0" y="300">BOONKER!</text></svg>
     </h1>
-    <p class="lead">Катастрофа уже случилась. Благо у нас есть бункер, но на всех мест не хватит. Докажи, что без тебя не выжить.</p>
+    <p class="lead">Катастрофа уже случилась.<br>Благо у нас есть бункер,<br>но на всех мест не хватит.</p>
+    <p class="lead lead-b">Докажи, что без тебя не выжить.</p>
     ${S.prefill ? join + create : create + join}
     <section>
       <h2>Как играть</h2>

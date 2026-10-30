@@ -38,7 +38,7 @@ p{margin:0 0 10px}
 .strip-label::after{left:100%;background:linear-gradient(270deg,transparent,var(--bg))}
 @media (max-width:899px){
   .hdr{display:block;max-width:none;padding:10px 0 4px}
-  .hdr .brand,.hdr .made{display:none}
+  .hdr .brand{display:none}
 }
 /* колонки маскотов по краям (компьютер), как на weareable.ru */
 .mascot-col{position:fixed;top:0;bottom:0;width:var(--mascot-size);overflow:hidden;pointer-events:none;z-index:0;display:none;justify-content:center}
@@ -56,6 +56,7 @@ p{margin:0 0 10px}
 }
 @media (prefers-reduced-motion:reduce){.strip-track,.mascot-track{animation:none}}
 .brand{font-weight:700;font-size:20px;letter-spacing:-.02em}
+.foot{text-align:center;padding:48px 0 8px}
 .made{font-size:13px;color:var(--mute);text-decoration:none;white-space:nowrap}
 .made b{color:var(--fg)}
 .made:hover b{text-decoration:underline}
@@ -82,7 +83,6 @@ select{width:100%;font:16px "Helvetica Neue",Helvetica,Arial,sans-serif;border:1
 .logo{margin:36px 0 20px;line-height:0}
 /* каждая строка растянута ровно на ширину колонки и чуть сжата по горизонтали */
 .logo svg{display:block;width:100%;height:auto;overflow:visible}
-.logo svg+svg{margin-top:3%}
 .logo text{fill:var(--fg);font-family:"Helvetica Neue",Helvetica,Arial,sans-serif;font-weight:700;font-size:200px}
 .lead{font-size:20px;line-height:1.3;margin:0 0 6px}
 .home section{margin-top:34px}
@@ -230,12 +230,12 @@ function loadSess() { try { return JSON.parse(localStorage.getItem(STORE)); } ca
 function saveSess(s) { try { localStorage.setItem(STORE, JSON.stringify(s)); } catch {} }
 const joinUrl = () => `${location.origin}/?room=${S.st.code}`;
 const val = (id) => (document.getElementById(id)?.value || '').trim();
+const footer = () => `<footer class="foot"><a class="made" href="${SITE}" target="_blank" rel="noopener">made by <b>WeAreAble</b></a></footer>`;
 const pname = (id) => S.st.players.find((p) => p.id === id)?.name || '?';
 // шапка живёт вне перерисовки, чтобы бегущая строка не дёргалась
 function mountHeader() {
   const m = '<img src="/mascot.png" alt="">'.repeat(48);
   document.getElementById('hdr').innerHTML = `<span class="brand" id="brand"></span>
-    <a class="made" href="${SITE}" target="_blank" rel="noopener">made by <b>WeAreAble</b></a>
     <a class="strip" href="${SITE}" target="_blank" rel="noopener" aria-label="WeAreAble">
       <span class="strip-track" aria-hidden="true">${m}${m}</span>
       <span class="strip-label">WeAreAble</span>
@@ -388,6 +388,23 @@ document.addEventListener('keydown', (e) => {
 document.addEventListener('visibilitychange', () => { if (!document.hidden) { S.idle = 0; poll(); } });
 
 /* ---------- отрисовка ---------- */
+// Заголовок: одинаковый кегль у обеих строк, длинная строка ровно во всю ширину,
+// короткая добирает ширину разрядкой. Буквы не растягиваются.
+function fitLogo() {
+  const svg = document.getElementById('logo');
+  if (!svg) return;
+  const [a, b] = svg.querySelectorAll('text');
+  for (const t of [a, b]) { t.style.fontSize = '200px'; t.removeAttribute('textLength'); t.removeAttribute('lengthAdjust'); }
+  const wa = a.getComputedTextLength(), wb = b.getComputedTextLength();
+  if (!wa || !wb) return;
+  const fs = 200 * 1000 / Math.max(wa, wb);
+  const cap = fs * 0.72, gap = fs * 0.14;
+  for (const t of [a, b]) { t.style.fontSize = fs + 'px'; t.setAttribute('textLength', 1000); t.setAttribute('lengthAdjust', 'spacing'); }
+  a.setAttribute('y', cap);
+  b.setAttribute('y', cap * 2 + gap);
+  svg.setAttribute('viewBox', `0 0 1000 ${cap * 2 + gap}`);
+}
+
 function render() {
   S.pending = false;
   const brand = document.getElementById('brand');
@@ -398,6 +415,7 @@ function render() {
   else if (st.phase === 'lobby') app.innerHTML = vLobby(st);
   else if (st.phase === 'game') app.innerHTML = vGame(st);
   else app.innerHTML = vFinal(st);
+  fitLogo();
   const q = document.getElementById('qr');
   if (q) {
     if (window.qrcode) { const qr = qrcode(0, 'M'); qr.addData(joinUrl()); qr.make(); q.innerHTML = qr.createSvgTag({ cellSize: 4, margin: 0, scalable: true }); }
@@ -417,14 +435,12 @@ function vHome() {
   const create = `
   <section>
     <h2>Новая игра</h2>
-    <label class="field"><span>Твоё имя</span><input id="cName" maxlength="20" autocomplete="nickname" placeholder="Как тебя зовут"></label>
+    <label class="field"><input id="cName" maxlength="20" autocomplete="nickname" placeholder="Как тебя зовут" aria-label="Твоё имя"></label>
     <button class="btn" data-a="create">Создать комнату</button>
-    <p class="hint">Ты станешь ведущим и покажешь друзьям код или QR.</p>
   </section>`;
   return `<main class="wrap home">
     <h1 class="logo" aria-label="WEAREABLE BOONKER!">
-      <svg viewBox="0 0 1000 144" aria-hidden="true"><text x="0" y="144" textLength="1000" lengthAdjust="spacingAndGlyphs">WEAREABLE</text></svg>
-      <svg viewBox="0 0 1000 144" aria-hidden="true"><text x="0" y="144" textLength="1000" lengthAdjust="spacingAndGlyphs">BOONKER!</text></svg>
+      <svg id="logo" viewBox="0 0 1000 300" aria-hidden="true"><text x="0" y="140">WEAREABLE</text><text x="0" y="300">BOONKER!</text></svg>
     </h1>
     <p class="lead">Катастрофа уже случилась. Благо у нас есть бункер, но на всех мест не хватит. Докажи, что без тебя не выжить.</p>
     ${S.prefill ? join + create : create + join}
@@ -438,7 +454,7 @@ function vHome() {
       </ol>
       <p class="hint">От 3 до 16 игроков, лучше от 6. Каждый играет со своего телефона.</p>
     </section>
-  </main>`;
+  ${footer()}</main>`;
 }
 
 function vLobby(st) {
@@ -464,7 +480,7 @@ function vLobby(st) {
       <div style="margin-top:26px"><button class="btn" data-a="start" ${st.players.length < 3 ? 'disabled' : ''}>Начать игру</button>
       <p class="hint">Пока игра не началась, можно заходить. Интереснее всего от 6 человек.</p></div>`
     : `<p class="hint" style="margin-top:20px">Ведущий начнёт игру, когда все соберутся.</p>`}
-  </main>`;
+  ${footer()}</main>`;
 }
 
 function rowsOther(p, all) {
@@ -644,7 +660,7 @@ function vGame(st) {
       ${st.event ? `<div class="event"><h3>Событие</h3><p>${esc(st.event.t)}</p></div>` : ''}
       ${showLast ? `<p class="last">${esc(last.text)}</p>` : ''}
     </div>
-    <main class="wrap">${vVote(st)}${body}</main>
+    <main class="wrap">${vVote(st)}${body}${footer()}</main>
     <nav class="tabs">${tabs.map(([k, t]) => `<button class="${S.tab === k ? 'on' : ''}" data-a="tab" data-t="${k}">${t}</button>`).join('')}</nav>`;
 }
 
@@ -666,7 +682,7 @@ function vFinal(st) {
     <h2 class="sec-h">В бункере: ${inside.length}</h2>
     ${inside.map((p) => personCard(p, st, { all: true, ok: true })).join('')}
     ${outside.length ? `<h2 class="sec-h">Снаружи: ${outside.length}</h2>${outside.map((p) => personCard(p, st, { all: true })).join('')}` : ''}
-  </main>`;
+  ${footer()}</main>`;
 }
 
 /* ---------- старт ---------- */

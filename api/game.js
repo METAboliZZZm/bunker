@@ -1,14 +1,14 @@
 import crypto from 'node:crypto';
 import * as D from '../lib/data.js';
 
-const KEYS = ['prof', 'bio', 'health', 'hobby', 'phobia', 'trait', 'baggage', 'fact'];
-const DEAL = ['health', 'hobby', 'phobia', 'trait', 'baggage', 'fact'];
+const KEYS = ['prof', 'bio', 'family', 'health', 'hobby', 'phobia', 'trait', 'baggage', 'fact'];
+const DEAL = ['family', 'health', 'hobby', 'phobia', 'trait', 'baggage', 'fact'];
 const NAME = {
-  prof: 'Профессия', bio: 'Биология', health: 'Здоровье', hobby: 'Хобби',
+  prof: 'Профессия', bio: 'Биология', family: 'Семья', health: 'Здоровье', hobby: 'Хобби',
   phobia: 'Фобия', trait: 'Характер', baggage: 'Багаж', fact: 'Факт',
 };
 const ACC = {
-  prof: 'профессию', bio: 'биологию', health: 'здоровье', hobby: 'хобби',
+  prof: 'профессию', bio: 'биологию', family: 'семейное положение', health: 'здоровье', hobby: 'хобби',
   phobia: 'фобию', trait: 'характер', baggage: 'багаж', fact: 'факт',
 };
 const NEED = {
@@ -130,7 +130,7 @@ function genBio(g, opts) {
 
 function genProf(c, age) {
   const card = copy(c);
-  if (c.tags.includes('nostaj')) return card;
+  if (c.tags.includes('nostaj') || c.t.includes(',')) return card;
   if (Math.random() < 0.1) {
     card.t += ', стажёр';
     card.v = Math.max(-1, card.v - 1);
@@ -223,9 +223,14 @@ function deal(s) {
   }
 
   // профессии: примерно треть по-настоящему полезных, остальные — угар
-  const strongN = Math.max(1, Math.round(n * 0.3));
+  const strongN = Math.max(1, Math.round(n * 0.25));
   const strong = shuffle(D.prof.filter((c) => c.v >= 2)).slice(0, strongN);
-  const weak = shuffle(D.prof.filter((c) => c.v < 2)).slice(0, n - strongN);
+  // одна и та же профессия (например, два таролога) в партии не повторяется
+  const seen = new Set(), weak = [];
+  for (const c of shuffle(D.prof.filter((x) => x.v < 2))) {
+    const base = c.t.split(',')[0];
+    if (!seen.has(base) && weak.length < n - strongN) { seen.add(base); weak.push(c); }
+  }
   const profs = shuffle([...strong, ...weak]);
 
   const used = Object.fromEntries(DEAL.map((k) => [k, new Set()]));

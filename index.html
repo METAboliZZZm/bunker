@@ -3,158 +3,166 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<meta name="theme-color" content="#1d2723">
-<title>Бункер</title>
-<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>☢️</text></svg>">
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=PT+Mono&family=PT+Sans:wght@400;700&family=PT+Sans+Narrow:wght@700&display=swap" rel="stylesheet">
+<meta name="theme-color" content="#000000">
+<meta name="description" content="Бункер — игра для компании. Каждый играет со своего телефона.">
+<title>Бункер — WeAreAble</title>
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' fill='black'/><rect x='22' y='22' width='56' height='56' fill='none' stroke='white' stroke-width='10'/></svg>">
 <script src="https://cdn.jsdelivr.net/npm/qrcode-generator@1.4.4/qrcode.js" defer></script>
 <style>
-:root{
-  --wall:#1d2723; --wall2:#26322d; --line:#3a4a43; --chalk:#dfe3da; --mute:#93a69d;
-  --paper:#e5e1d3; --paper2:#d6d1bf; --ink:#1e2220; --ink2:#6d6c62;
-  --teal:#4d8c79; --stamp:#b2352e;
-  color-scheme:dark;
-}
-*{box-sizing:border-box}
+:root{--bg:#000;--fg:#fff;--mute:#8d8d8d;--dim:#5a5a5a;--line:#2b2b2b;--bar:#2e2e2e;color-scheme:dark}
+*{box-sizing:border-box;border-radius:0}
 html{-webkit-text-size-adjust:100%}
 html,body{overflow-x:hidden;overflow-x:clip}
-body{margin:0;background:var(--wall);color:var(--chalk);font:17px/1.45 "PT Sans","Segoe UI",Roboto,system-ui,sans-serif;padding-top:env(safe-area-inset-top,0px);min-height:100vh;-webkit-tap-highlight-color:transparent}
+body{margin:0;background:var(--bg);color:var(--fg);font:16px/1.4 "Helvetica Neue",Helvetica,Arial,sans-serif;padding-top:env(safe-area-inset-top,0px);min-height:100vh;-webkit-tap-highlight-color:transparent;-webkit-font-smoothing:antialiased}
 button{font:inherit;color:inherit;cursor:pointer}
-.wrap{max-width:560px;margin:0 auto;padding:10px 16px calc(110px + env(safe-area-inset-bottom,0px))}
-h1,h2,h3{font-family:"PT Sans Narrow","PT Sans","Arial Narrow",sans-serif;font-weight:700;line-height:1.1;margin:0}
-.wall-h{font-size:23px;margin:30px 0 10px}
-.hint{color:var(--mute);font-size:15px;margin:6px 0 12px}
+a{color:inherit}
+h1,h2,h3{font-weight:700;margin:0;line-height:1;letter-spacing:-.02em}
 p{margin:0 0 10px}
+.wrap{max-width:560px;margin:0 auto;padding:0 16px calc(100px + env(safe-area-inset-bottom,0px))}
+.hint{color:var(--mute);font-size:15px;margin:6px 0 12px}
+.sec-h{font-size:24px;margin:34px 0 12px}
+:focus-visible{outline:2px solid var(--fg);outline-offset:2px}
 
-/* вход */
-.logo{font-size:clamp(68px,24vw,128px);line-height:.88;letter-spacing:-.015em;margin:30px 0 16px}
-.lead{font-size:19px;max-width:32ch;margin:0 0 6px}
-.home section{margin-top:30px}
-.home h2{font-size:24px;margin-bottom:12px}
+/* шапка */
+.hdr{max-width:560px;margin:0 auto;padding:14px 16px;display:flex;justify-content:space-between;align-items:baseline;gap:12px}
+.brand{font-weight:700;font-size:20px;letter-spacing:-.02em}
+.made{font-size:13px;color:var(--mute);text-decoration:none;white-space:nowrap}
+.made b{color:var(--fg)}
+.made:hover b{text-decoration:underline}
+
+/* формы */
 .field{display:block;margin:0 0 12px}
-.field>span{display:block;font-size:14px;color:var(--mute);margin-bottom:5px}
-input{width:100%;font:19px "PT Mono",ui-monospace,Menlo,monospace;border:0;border-radius:6px;padding:12px 14px;background:var(--paper);color:var(--ink)}
-input::placeholder{color:#9b998d}
-select{width:100%;font:16px "PT Sans",sans-serif;border:1.5px solid var(--line);border-radius:10px;padding:12px 38px 12px 14px;color:var(--chalk);appearance:none;-webkit-appearance:none;
-  background:var(--wall2) url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%2393a69d' stroke-width='2' fill='none'/%3E%3C/svg%3E") no-repeat right 14px center}
-
-/* кнопки */
-.btn{display:block;width:100%;border:0;border-radius:10px;padding:14px 16px;font-weight:700;font-size:17px;background:var(--paper);color:var(--ink);text-align:center}
-.btn:active{transform:translateY(1px)}
-.btn.ghost{background:transparent;color:var(--chalk);border:1.5px solid var(--line)}
-.btn.red{background:var(--stamp);color:#fff}
-.btn.warn{background:transparent;color:#e0897f;border:1.5px solid #7c3a33}
-.btn.small{display:inline-block;width:auto;padding:9px 14px;font-size:15px;border-radius:8px}
-.btn[disabled]{opacity:.45}
-.stack>*+*{margin-top:8px}
+.field>span{display:block;font-size:14px;color:var(--mute);margin-bottom:6px}
+input{width:100%;font:18px "Helvetica Neue",Helvetica,Arial,sans-serif;border:1px solid var(--fg);padding:13px 14px;background:var(--bg);color:var(--fg);-webkit-appearance:none}
+input::placeholder{color:var(--dim)}
+select{width:100%;font:16px "Helvetica Neue",Helvetica,Arial,sans-serif;border:1px solid var(--fg);padding:12px 38px 12px 14px;color:var(--fg);appearance:none;-webkit-appearance:none;
+  background:var(--bg) url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='white' stroke-width='1.5' fill='none'/%3E%3C/svg%3E") no-repeat right 14px center}
+.btn{display:block;width:100%;border:1px solid var(--fg);padding:15px 16px;font-weight:700;font-size:17px;background:var(--fg);color:var(--bg);text-align:center}
+.btn:active{opacity:.8}
+.btn.ghost{background:var(--bg);color:var(--fg)}
+.btn.small{display:inline-block;width:auto;padding:9px 14px;font-size:15px}
+.btn[disabled]{opacity:.35}
 .grid2{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin:8px 0}
-:focus-visible{outline:3px solid var(--teal);outline-offset:2px}
-.top{display:flex;justify-content:space-between;align-items:center;min-height:42px}
-.brand{font:700 21px "PT Sans Narrow","PT Sans",sans-serif}
-.room{font:15px "PT Mono",monospace;color:var(--mute)}
-.link{background:none;border:0;color:var(--mute);text-decoration:underline;text-underline-offset:3px;padding:8px 0;font-size:15px}
+.link{background:none;border:0;color:var(--mute);text-decoration:underline;text-underline-offset:3px;padding:6px 0;font-size:15px}
+.seg{display:grid;grid-template-columns:1fr 1fr;border:1px solid var(--fg)}
+.seg button{background:var(--bg);border:0;padding:11px;font-weight:700}
+.seg button.on{background:var(--fg);color:var(--bg)}
+
+/* главная */
+.logo{font-size:clamp(76px,26vw,140px);line-height:.82;letter-spacing:-.06em;margin:28px 0 18px}
+.lead{font-size:20px;line-height:1.3;max-width:28ch;margin:0 0 6px}
+.home section{margin-top:34px}
+.home h2{font-size:26px;margin-bottom:14px}
+.rules{padding-left:20px;margin:0}
+.rules li{margin:0 0 8px}
 
 /* лобби */
-.code-label{color:var(--mute);font-size:15px;margin-top:18px}
-.code{font:700 68px/1 "PT Mono",monospace;letter-spacing:.12em;margin:4px 0 14px}
+.code-label{color:var(--mute);font-size:15px;margin-top:10px}
+.code{font-weight:700;font-size:84px;line-height:1;letter-spacing:-.03em;margin:6px 0 16px}
 .joinbox{display:flex;gap:16px;align-items:flex-start;flex-wrap:wrap}
-.qr{background:var(--paper);padding:10px;border-radius:4px;line-height:0}
-.qr svg,.qr img{width:164px;height:164px;display:block}
-.joinbox .stack{flex:1;min-width:150px}
-.plist{list-style:none;padding:0;margin:0}
-.plist li{display:flex;justify-content:space-between;align-items:center;padding:11px 0;border-bottom:1px solid var(--line);font-size:19px}
+.qr{background:#fff;padding:10px;line-height:0}
+.qr svg{width:156px;height:156px;display:block}
+.joinbox .side{flex:1;min-width:150px}
+.plist{list-style:none;padding:0;margin:0;border-top:1px solid var(--line)}
+.plist li{display:flex;justify-content:space-between;align-items:center;padding:12px 0;border-bottom:1px solid var(--line);font-size:19px}
 .who{color:var(--mute);font-size:14px;margin-left:8px}
 .x{background:none;border:0;color:var(--mute);font-size:15px;text-decoration:underline;padding:6px 0 6px 12px}
 
 /* шапка игры */
-.gbar{max-width:560px;margin:0 auto;padding:4px 16px 0}
-.status{margin:2px 0 8px;font-size:16px}
-.last{margin:0 0 4px;padding:8px 10px;border-left:3px solid var(--teal);background:var(--wall2);font-size:15px;border-radius:0 6px 6px 0}
-.last.fresh{animation:fresh 1.4s ease-out}
-@keyframes fresh{from{background:#3d5249}}
+.gtop{max-width:560px;margin:0 auto;padding:0 16px}
+.meta{display:flex;justify-content:space-between;align-items:center;color:var(--mute);font-size:14px;border-top:1px solid var(--line);padding:8px 0}
+.status{font-size:17px;line-height:1.35;margin:10px 0 4px}
+.status b{font-weight:700}
+.last{margin:8px 0 6px;padding:8px 0 8px 12px;border-left:2px solid var(--fg);font-size:15px;color:#d6d6d6}
 
-/* карточки-анкеты */
-.card{position:relative;background:var(--paper);color:var(--ink);border-radius:3px;padding:16px 16px 4px;margin:0 0 14px;box-shadow:0 2px 0 rgba(0,0,0,.28)}
-.card.out{background:var(--paper2)}
-.card h2{font-size:28px}
-.card h3{font-size:23px}
-.card-head{display:flex;align-items:baseline;gap:8px;flex-wrap:wrap;min-height:30px;padding-right:118px}
+/* событие — единственный инвертированный блок в игре */
+.event{background:var(--fg);color:var(--bg);padding:14px 16px;margin:10px 0 14px}
+.event h3{font-size:15px;margin-bottom:6px}
+.event p{margin:0;font-size:17px;line-height:1.35}
+
+/* карточки */
+.card{position:relative;border:1px solid var(--fg);padding:16px 16px 4px;margin:0 0 14px}
+.card.out{border-color:var(--dim);color:var(--mute)}
+.card h2{font-size:30px}
+.card h3{font-size:24px}
+.card-head{display:flex;align-items:baseline;gap:8px;flex-wrap:wrap;padding-right:96px;min-height:28px}
 .card-head.free{padding-right:0}
-.tag{font-size:13px;color:var(--ink2)}
-.row{display:grid;grid-template-columns:1fr auto;column-gap:12px;padding:10px 0;border-top:1px solid #c9c4b2}
-.card-head+.row{margin-top:10px}
-.lab{grid-column:1;font-size:13px;color:var(--ink2);line-height:1.2}
-.val{grid-column:1;font:16px/1.35 "PT Mono",ui-monospace,monospace;overflow-wrap:anywhere;margin-top:2px}
+.tag{font-size:13px;color:var(--mute)}
+.flag{position:absolute;top:16px;right:16px;background:var(--fg);color:var(--bg);font-weight:700;font-size:13px;padding:4px 8px}
+.card.out .flag{background:var(--dim);color:var(--bg)}
+.row{display:grid;grid-template-columns:1fr auto;column-gap:12px;padding:10px 0;border-top:1px solid var(--line)}
+.card-head+.row{margin-top:12px}
+.lab{grid-column:1;font-size:13px;color:var(--mute);line-height:1.2}
+.val{grid-column:1;font-size:16px;line-height:1.35;overflow-wrap:anywhere;margin-top:3px}
 .row .act{grid-column:2;grid-row:1/3;align-self:center}
-.row.closed .val{color:#7f7d72}
-.compact .row{grid-template-columns:88px 1fr;padding:7px 0;align-items:baseline}
+.row.closed .val{color:var(--mute)}
+.rv{border:1px solid var(--fg);background:var(--bg);color:var(--fg);padding:7px 12px;font-size:14px;font-weight:700}
+.mark{font-size:13px;color:var(--mute)}
+.redact{display:inline-block;height:14px;background:var(--bar);vertical-align:-2px}
+.compact .row{grid-template-columns:92px 1fr;padding:8px 0;align-items:baseline}
 .compact .lab{grid-row:1}
 .compact .val{grid-column:2;grid-row:1;margin:0;font-size:15px}
-.compact .redact{height:13px}
-.rv{border:1.5px solid var(--ink);background:transparent;color:var(--ink);border-radius:8px;padding:7px 11px;font-size:14px;font-weight:700}
-.mark{font-size:13px;color:var(--teal);font-weight:700}
-.redact{display:inline-block;height:15px;background:var(--ink);vertical-align:-2px;border-radius:1px}
-.sp-used{font-size:14px;color:var(--ink2);border-top:1px solid #c9c4b2;padding:9px 0 10px;margin:0}
-.stamp{position:absolute;top:14px;right:12px;transform:rotate(-9deg);font:700 16px "PT Mono",monospace;letter-spacing:.08em;text-transform:uppercase;color:var(--stamp);border:3px double var(--stamp);border-radius:5px;padding:4px 10px;mix-blend-mode:multiply;opacity:.92}
-.stamp.ok{color:var(--teal);border-color:var(--teal)}
-.stamp.slam{animation:slam .5s cubic-bezier(.2,.9,.3,1.2)}
-@keyframes slam{0%{transform:rotate(-9deg) scale(1.7);opacity:0}70%{transform:rotate(-9deg) scale(.94);opacity:1}100%{transform:rotate(-9deg) scale(1)}}
-@media (prefers-reduced-motion:reduce){.stamp.slam,.last.fresh{animation:none}}
+.sp-used{font-size:14px;color:var(--mute);border-top:1px solid var(--line);padding:9px 0 11px;margin:0}
 .pinline{font-size:14px;color:var(--mute);margin:-4px 0 0}
 
 /* спецкарты */
-.sp{border:1.5px dashed var(--mute);border-radius:6px;padding:12px 14px;margin:0 0 10px;display:flex;gap:12px;align-items:center}
+.sp{border:1px dashed var(--mute);padding:12px 14px;margin:0 0 10px;display:flex;gap:12px;align-items:center}
 .sp p{margin:0;flex:1}
-.sp.used{opacity:.5}
-.sp-done{font-size:14px;color:var(--mute)}
+.sp.used{opacity:.4}
 
 /* голосование */
-.vote{background:var(--wall2);border-radius:8px;padding:14px;margin:8px 0 16px;border:1.5px solid var(--line)}
-.vote.open{border-color:var(--stamp)}
-.vote h3{font-size:21px;margin-bottom:4px}
-.vgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(130px,1fr));gap:8px;margin-top:10px}
-.vbtn{background:transparent;border:1.5px solid var(--line);border-radius:8px;padding:12px 8px;font-weight:700;overflow-wrap:anywhere}
-.vbtn.on{background:var(--stamp);border-color:var(--stamp);color:#fff}
+.vote{border:1px solid var(--fg);padding:14px;margin:10px 0 16px}
+.vote h3{font-size:21px;margin-bottom:6px}
+.vgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(130px,1fr));gap:8px;margin-top:12px}
+.vbtn{background:var(--bg);border:1px solid var(--dim);padding:13px 8px;font-weight:700;overflow-wrap:anywhere}
+.vbtn.on{background:var(--fg);border-color:var(--fg);color:var(--bg)}
 .tally{list-style:none;padding:0;margin:8px 0}
-.tally li{display:flex;align-items:center;gap:10px;padding:9px 0;border-top:1px solid var(--line)}
-.tally .n{font:700 22px "PT Mono",monospace;min-width:1.6ch}
-.tally .t{flex:1}
-.tally small{display:block;color:var(--mute);font-size:14px}
+.tally li{display:flex;align-items:center;gap:12px;padding:10px 0;border-top:1px solid var(--line)}
+.tally .n{font-weight:700;font-size:26px;min-width:1.4ch}
+.tally .t{flex:1;font-weight:700}
+.tally small{display:block;color:var(--mute);font-size:14px;font-weight:400}
 
 /* бункер */
-.cat h2{font-size:32px;margin-bottom:8px}
-.facts{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin:14px 0 12px}
-.facts dt{font-size:13px;color:var(--ink2)}
-.facts dd{margin:2px 0 0;font:700 18px "PT Mono",monospace}
+.cat h2{font-size:34px;margin-bottom:10px}
+.facts{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin:16px 0 14px}
+.facts dt{font-size:13px;color:var(--mute)}
+.facts dd{margin:3px 0 0;font-weight:700;font-size:20px}
 .card ul{margin:6px 0 14px;padding-left:20px}
-.card li{margin:3px 0}
+.card li{margin:4px 0}
+.needs{display:flex;flex-wrap:wrap;gap:6px;margin:4px 0 16px}
+.needs span{border:1px solid var(--fg);padding:4px 8px;font-size:14px}
 .journal{list-style:none;padding:0;margin:0}
-.journal li{padding:8px 0;border-bottom:1px solid var(--line);font-size:15px}
+.journal li{padding:9px 0;border-bottom:1px solid var(--line);font-size:15px}
 
 /* ведущий */
-.hlist{list-style:none;padding:0;margin:0}
+.hlist{list-style:none;padding:0;margin:0;border-top:1px solid var(--line)}
 .hlist li{display:flex;justify-content:space-between;align-items:center;gap:10px;padding:8px 0;border-bottom:1px solid var(--line)}
 .hlist .gone{color:var(--mute)}
-.stepper{display:flex;align-items:center;gap:12px;margin:12px 0 0}
+.stepper{display:flex;align-items:center;gap:12px;margin:14px 0 0}
 .stepper span{flex:1}
-.stepper button{width:46px;height:46px;border-radius:10px;border:1.5px solid var(--line);background:none;font-size:22px}
-.stepper b{font:700 24px "PT Mono",monospace;min-width:2ch;text-align:center}
+.stepper button{width:46px;height:46px;border:1px solid var(--fg);background:var(--bg);font-size:22px}
+.stepper b{font-size:26px;min-width:2ch;text-align:center}
 
 /* финал */
-.final-h{font-size:clamp(42px,12vw,68px);line-height:.95;margin:24px 0 12px}
+.final-h{font-size:clamp(46px,13vw,76px);line-height:.9;letter-spacing:-.04em;margin:20px 0 14px}
+.verdict{background:var(--fg);color:var(--bg);padding:18px 16px 8px;margin:18px 0}
+.verdict h2{font-size:34px;margin-bottom:8px}
+.verdict .story{font-size:17px;margin-bottom:14px}
+.check{display:grid;grid-template-columns:22px 1fr;gap:6px;padding:9px 0;border-top:1px solid #d5d5d5;font-size:15px}
+.check b{display:block}
+.check .sign{font-weight:700;font-size:18px;line-height:1.1}
 
 /* вкладки */
-.tabs{position:fixed;left:0;right:0;bottom:0;display:flex;background:var(--wall2);border-top:1px solid var(--line);padding-bottom:env(safe-area-inset-bottom,0px);z-index:5}
-.tabs button{flex:1;background:none;border:0;border-top:2px solid transparent;margin-top:-1px;padding:12px 2px 14px;color:var(--mute);font-size:15px;font-weight:700}
-.tabs button.on{color:var(--chalk);border-top-color:var(--paper)}
+.tabs{position:fixed;left:0;right:0;bottom:0;display:flex;background:var(--bg);border-top:1px solid var(--line);padding-bottom:env(safe-area-inset-bottom,0px);z-index:5}
+.tabs button{flex:1;background:none;border:0;border-top:2px solid transparent;margin-top:-1px;padding:13px 2px 15px;color:var(--mute);font-size:15px;font-weight:700}
+.tabs button.on{color:var(--fg);border-top-color:var(--fg)}
 
-#toast{position:fixed;left:50%;bottom:calc(78px + env(safe-area-inset-bottom,0px));transform:translateX(-50%);background:var(--paper);color:var(--ink);padding:11px 16px;border-radius:8px;font-size:15px;width:max-content;max-width:calc(100% - 32px);box-shadow:0 8px 24px rgba(0,0,0,.45);opacity:0;pointer-events:none;transition:opacity .2s;z-index:10}
+#toast{position:fixed;left:50%;bottom:calc(80px + env(safe-area-inset-bottom,0px));transform:translateX(-50%);background:var(--fg);color:var(--bg);padding:12px 16px;font-size:15px;font-weight:700;width:max-content;max-width:calc(100% - 32px);opacity:0;pointer-events:none;transition:opacity .2s;z-index:10}
 #toast.show{opacity:1}
-#net{position:fixed;top:0;left:0;right:0;padding:calc(6px + env(safe-area-inset-top,0px)) 12px 6px;background:var(--stamp);color:#fff;text-align:center;font-size:14px;display:none;z-index:9}
+#net{position:fixed;top:0;left:0;right:0;padding:calc(6px + env(safe-area-inset-top,0px)) 12px 6px;background:var(--fg);color:var(--bg);text-align:center;font-size:14px;font-weight:700;display:none;z-index:9}
 #net.show{display:block}
 .center{text-align:center;padding-top:30vh;color:var(--mute)}
+@media (prefers-reduced-motion:reduce){#toast{transition:none}}
 </style>
 </head>
 <body>
@@ -165,12 +173,12 @@ select{width:100%;font:16px "PT Sans",sans-serif;border:1.5px solid var(--line);
 const KEYS = ['prof','bio','health','hobby','phobia','trait','baggage','fact'];
 const NAME = {prof:'Профессия',bio:'Биология',health:'Здоровье',hobby:'Хобби',phobia:'Фобия',trait:'Характер',baggage:'Багаж',fact:'Факт'};
 const ACC = {prof:'профессию',bio:'биологию',health:'здоровье',hobby:'хобби',phobia:'фобию',trait:'характер',baggage:'багаж',fact:'факт'};
-const STORE = 'bunker-session';
+const STORE = 'bunker2-session';
+const SITE = 'https://weareable.ru';
 
 const S = {
-  sess: null, st: null, tab: 'me', busy: false, pending: false, inflight: false, timer: null,
-  tool: { op: 'swap', key: 'health', target: '', other: '', newHost: '' },
-  seenOut: null, lastLog: null, prefill: '',
+  sess: null, st: null, tab: 'me', busy: false, pending: false, inflight: false, timer: null, idle: 0,
+  tool: { op: 'swap', key: 'health', target: '', other: '', newHost: '' }, prefill: '',
 };
 const app = document.getElementById('app');
 
@@ -186,6 +194,7 @@ function saveSess(s) { try { localStorage.setItem(STORE, JSON.stringify(s)); } c
 const joinUrl = () => `${location.origin}/?room=${S.st.code}`;
 const val = (id) => (document.getElementById(id)?.value || '').trim();
 const pname = (id) => S.st.players.find((p) => p.id === id)?.name || '?';
+const header = (brand = true) => `<header class="hdr"><span class="brand">${brand ? 'Бункер' : ''}</span><a class="made" href="${SITE}" target="_blank" rel="noopener">made by <b>WeAreAble</b></a></header>`;
 
 async function api(action, data = {}) {
   const body = { action, ...(S.sess || {}), ...data };
@@ -205,7 +214,9 @@ function setState(st) {
   if (S.st && st.v < S.st.v) return;
   const prev = S.st;
   S.st = st;
-  if (prev && st.vote?.open && !prev.vote?.open) { navigator.vibrate?.(180); }
+  S.idle = 0;
+  if (prev && st.vote?.open && !prev.vote?.open) navigator.vibrate?.(180);
+  if (prev && st.event && st.event.t !== prev.event?.t) navigator.vibrate?.(80);
   if (prev && prev.phase !== st.phase) { S.tab = 'me'; window.scrollTo(0, 0); }
   if (editing()) S.pending = true; else render();
 }
@@ -216,21 +227,23 @@ async function poll() {
   S.inflight = true;
   try {
     const j = await api('state', { v: S.st ? S.st.v : 0 });
-    if (j.state) setState(j.state);
+    if (j.state) setState(j.state); else S.idle++;
     setNet('');
   } catch (e) {
     S.inflight = false;
     if (e.status === 401 || e.status === 404) return dropSession(e.message);
-    setNet(e.net ? 'Нет связи. Пробуем переподключиться…' : e.message);
+    setNet(e.net ? 'Нет связи. Переподключаемся…' : e.message);
   }
   S.inflight = false;
-  S.timer = setTimeout(poll, document.hidden ? 6000 : 1500);
+  // чем дольше ничего не меняется, тем реже спрашиваем сервер
+  const wait = document.hidden ? 8000 : S.idle > 30 ? 4000 : 2000;
+  S.timer = setTimeout(poll, wait);
 }
 
 function dropSession(msg) {
   clearTimeout(S.timer);
   try { localStorage.removeItem(STORE); } catch {}
-  S.sess = null; S.st = null; S.seenOut = null; S.lastLog = null; S.tab = 'me';
+  S.sess = null; S.st = null; S.tab = 'me';
   setNet('');
   render();
   if (msg) toast(msg);
@@ -285,16 +298,18 @@ const H = {
     try { await navigator.clipboard.writeText(url); toast('Ссылка скопирована'); } catch { prompt('Скопируй ссылку', url); }
   },
   tab(d) { S.tab = d.t; render(); window.scrollTo(0, 0); },
+  orient(d) { act('opts', { orient: d.v === '1' }); },
   kick(d) { if (confirm(`Убрать ${pname(d.id)} из комнаты?`)) act('kick', { target: d.id }); },
   start() {
     const n = S.st.players.length;
-    if (n < 6 && !confirm(`Игроков ${n}. Лучше всего играть от 6 человек. Начать всё равно?`)) return;
+    if (n < 6 && !confirm(`Игроков ${n}. Интереснее всего играть от 6 человек. Начать всё равно?`)) return;
     act('start');
   },
   reveal(d) { if (confirm(`Открыть ${ACC[d.k]} для всех?`)) act('reveal', { key: d.k }); },
   special(d) { if (confirm('Сыграть эту спецкарту? Её увидят все.')) act('special', { idx: d.i }); },
   vote(d) { act('vote', { target: d.id }); },
   round() { act('round'); },
+  event() { act('event'); },
   voteStart() { act('voteStart'); },
   voteClose() { act('voteClose'); },
   voteCancel() { act('voteCancel'); },
@@ -305,7 +320,7 @@ const H = {
   newCat() { if (confirm('Сменить катастрофу на другую?')) act('newCat'); },
   addRoom() { act('addRoom'); },
   hostTo() { const id = S.tool.newHost; if (id && confirm(`Передать роль ведущего игроку ${pname(id)}?`)) act('host', { target: id }); },
-  finish() { if (confirm('Закрыть двери бункера и закончить игру? Все карты откроются.')) act('finish'); },
+  finish() { if (confirm('Закрыть двери и закончить игру? Все карты откроются, и вы узнаете, выжил ли бункер.')) act('finish'); },
   again() { if (confirm('Начать новую партию с этими же игроками?')) act('again'); },
 };
 
@@ -322,40 +337,24 @@ document.addEventListener('change', (e) => {
 document.addEventListener('focusout', () => setTimeout(() => { if (S.pending && !editing()) { S.pending = false; render(); } }, 60));
 document.addEventListener('keydown', (e) => {
   if (e.key !== 'Enter' || e.target.tagName !== 'INPUT') return;
-  const id = e.target.id;
-  if (id === 'cName') H.create(); else if (/^j/.test(id)) H.join();
+  if (e.target.id === 'cName') H.create(); else if (/^j/.test(e.target.id)) H.join();
 });
-document.addEventListener('visibilitychange', () => { if (!document.hidden) poll(); });
+document.addEventListener('visibilitychange', () => { if (!document.hidden) { S.idle = 0; poll(); } });
 
 /* ---------- отрисовка ---------- */
 function render() {
   S.pending = false;
   const st = S.st;
   if (!S.sess) app.innerHTML = vHome();
-  else if (!st) app.innerHTML = '<p class="center">Подключаемся к комнате…</p>';
+  else if (!st) app.innerHTML = header() + '<p class="center">Подключаемся к комнате…</p>';
   else if (st.phase === 'lobby') app.innerHTML = vLobby(st);
   else if (st.phase === 'game') app.innerHTML = vGame(st);
   else app.innerHTML = vFinal(st);
-  after();
-}
-
-function after() {
-  const st = S.st;
-  if (!st) return;
-  // QR в лобби
   const q = document.getElementById('qr');
   if (q) {
     if (window.qrcode) { const qr = qrcode(0, 'M'); qr.addData(joinUrl()); qr.make(); q.innerHTML = qr.createSvgTag({ cellSize: 4, margin: 0, scalable: true }); }
     else q.remove();
   }
-  // штампы: анимируем только свежие
-  const outIds = st.players.filter((p) => p.out).map((p) => p.id);
-  if (S.seenOut) document.querySelectorAll('.stamp[data-id]').forEach((el) => { if (!S.seenOut.has(el.dataset.id) && el.classList.contains('bad')) el.classList.add('slam'); });
-  S.seenOut = new Set(outIds);
-  // свежая запись журнала
-  const lastN = st.log.length ? st.log[st.log.length - 1].n : 0;
-  if (S.lastLog !== null && lastN > S.lastLog) document.querySelector('.last')?.classList.add('fresh');
-  S.lastLog = lastN;
 }
 
 function vHome() {
@@ -363,21 +362,31 @@ function vHome() {
   <section>
     <h2>Войти по коду</h2>
     <label class="field"><span>Код комнаты</span><input id="jCode" inputmode="numeric" maxlength="4" autocomplete="off" placeholder="0000" value="${esc(S.prefill)}"></label>
-    <label class="field"><span>Твоё имя</span><input id="jName" maxlength="20" autocomplete="nickname" placeholder="Как тебя звать"></label>
+    <label class="field"><span>Твоё имя</span><input id="jName" maxlength="20" autocomplete="nickname" placeholder="Как тебя зовут"></label>
     <label class="field"><span>PIN — только если возвращаешься в начатую игру</span><input id="jPin" inputmode="numeric" maxlength="4" autocomplete="off"></label>
     <button class="btn" data-a="join">Войти</button>
   </section>`;
   const create = `
   <section>
     <h2>Новая игра</h2>
-    <label class="field"><span>Твоё имя</span><input id="cName" maxlength="20" autocomplete="nickname" placeholder="Как тебя звать"></label>
+    <label class="field"><span>Твоё имя</span><input id="cName" maxlength="20" autocomplete="nickname" placeholder="Как тебя зовут"></label>
     <button class="btn" data-a="create">Создать комнату</button>
     <p class="hint">Ты станешь ведущим и покажешь друзьям код или QR.</p>
   </section>`;
-  return `<main class="wrap home">
+  return `${header(false)}<main class="wrap home">
     <h1 class="logo">Бункер</h1>
     <p class="lead">Катастрофа уже случилась. Мест в убежище хватит только половине из вас.</p>
     ${S.prefill ? join + create : create + join}
+    <section>
+      <h2>Как играть</h2>
+      <ol class="rules">
+        <li>Каждый получает тайную анкету: профессию, здоровье, багаж и ещё пять карт.</li>
+        <li>Каждый раунд вы открываете по одной карте и доказываете, что без вас бункеру не выжить.</li>
+        <li>В конце раунда голосуете, кого не берёте с собой.</li>
+        <li>Когда людей останется столько, сколько мест, игра посчитает, выживет ли ваш бункер.</li>
+      </ol>
+      <p class="hint">От 3 до 16 игроков, лучше от 6. Каждый играет со своего телефона.</p>
+    </section>
   </main>`;
 }
 
@@ -385,24 +394,25 @@ function vLobby(st) {
   const host = st.hostId === st.me.id;
   const list = st.players.map((p) => `<li><span>${esc(p.name)}${p.id === st.hostId ? '<span class="who">ведущий</span>' : ''}${p.id === st.me.id ? '<span class="who">это ты</span>' : ''}</span>
     ${host && p.id !== st.me.id ? `<button class="x" data-a="kick" data-id="${p.id}">убрать</button>` : ''}</li>`).join('');
-  return `<main class="wrap">
-    <div class="top"><span class="brand">Бункер</span><button class="link" data-a="exit">Выйти</button></div>
-    <div class="code-label">Код комнаты</div>
+  const orient = st.opts.orient !== false;
+  return `${header()}<main class="wrap">
+    <div class="meta" style="border:0;padding-top:0"><span>Комната</span><button class="link" data-a="exit">Выйти</button></div>
     <div class="code">${st.code}</div>
     <div class="joinbox">
       <div class="qr" id="qr"></div>
-      <div class="stack">
+      <div class="side">
         <p class="hint" style="margin-top:0">Друзья сканируют QR или открывают сайт и вводят код.</p>
         <button class="btn ghost" data-a="share">Отправить ссылку</button>
       </div>
     </div>
-    <h2 class="wall-h">Игроки: ${st.players.length}</h2>
+    <h2 class="sec-h">Игроки: ${st.players.length}</h2>
     <ul class="plist">${list}</ul>
-    <div style="margin-top:22px">
-      ${host ? `<button class="btn" data-a="start" ${st.players.length < 2 ? 'disabled' : ''}>Начать игру</button>
-        <p class="hint">Лучше всего играть вшестером и больше, до 16 человек. Пока игра не началась, можно заходить.</p>`
-      : `<p class="hint">Ведущий начнёт игру, когда все соберутся.</p>`}
-    </div>
+    ${host ? `<h2 class="sec-h">Настройки</h2>
+      <p style="margin-bottom:8px">Ориентация в карте биологии</p>
+      <div class="seg"><button class="${orient ? 'on' : ''}" data-a="orient" data-v="1">Показывать</button><button class="${orient ? '' : 'on'}" data-a="orient" data-v="0">Скрыть</button></div>
+      <div style="margin-top:26px"><button class="btn" data-a="start" ${st.players.length < 3 ? 'disabled' : ''}>Начать игру</button>
+      <p class="hint">Пока игра не началась, можно заходить. Интереснее всего от 6 человек.</p></div>`
+    : `<p class="hint" style="margin-top:20px">Ведущий начнёт игру, когда все соберутся.</p>`}
   </main>`;
 }
 
@@ -416,13 +426,12 @@ function rowsOther(p, all) {
 }
 
 function personCard(p, st, opts = {}) {
-  const tags = [p.id === st.hostId ? 'ведущий' : '', p.id === st.me.id ? 'это ты' : ''].filter(Boolean).join(', ');
-  let stamp = '';
-  if (opts.ok) stamp = `<span class="stamp ok">Одобрено</span>`;
-  else if (p.out) stamp = `<span class="stamp bad" data-id="${p.id}">Отказано</span>`;
+  const tags = [p.id === st.hostId ? 'ведущий' : '', p.id === st.me.id ? 'это ты' : '',
+    st.phase === 'game' && !p.out ? `открыто в раунде: ${p.rr}` : ''].filter(Boolean).join(', ');
+  const flag = opts.ok ? '<span class="flag">В бункере</span>' : p.out ? '<span class="flag">Изгнан</span>' : '';
   return `<section class="card compact ${p.out ? 'out' : ''}">
-    ${stamp}
-    <div class="card-head ${stamp ? '' : 'free'}"><h3>${esc(p.name)}</h3>${tags ? `<span class="tag">${tags}</span>` : ''}</div>
+    ${flag}
+    <div class="card-head ${flag ? '' : 'free'}"><h3>${esc(p.name)}</h3>${tags ? `<span class="tag">${tags}</span>` : ''}</div>
     ${rowsOther(p, opts.all)}
     ${p.sp.length ? `<p class="sp-used">Сыграно: ${p.sp.map((t) => `«${esc(t)}»`).join(', ')}</p>` : ''}
   </section>`;
@@ -435,7 +444,7 @@ function vVote(st) {
   const alive = st.players.filter((p) => !p.out);
   if (v.open) {
     const targets = alive.filter((p) => p.id !== st.me.id);
-    return `<section class="vote open">
+    return `<section class="vote">
       <h3>Голосование: кого не берём</h3>
       <p class="hint" style="margin:0">Проголосовали ${v.voted} из ${v.total}. Итоги увидят все, когда ведущий закроет голосование.</p>
       ${st.me.out ? '<p class="hint">Ты снаружи и не голосуешь.</p>'
@@ -446,12 +455,14 @@ function vVote(st) {
   const by = {};
   for (const [voter, target] of Object.entries(v.votes)) (by[target] ||= []).push(voter);
   const rows = Object.entries(by).sort((a, b) => b[1].length - a[1].length);
+  const tie = rows.length > 1 && rows[0][1].length === rows[1][1].length;
   return `<section class="vote">
     <h3>Итоги голосования</h3>
+    ${tie ? '<p class="hint" style="margin:0">Ничья. Дайте лидерам по 30 секунд на защиту и переголосуйте, или решает ведущий.</p>' : ''}
     ${rows.length ? `<ul class="tally">${rows.map(([t, vs]) => {
       const p = st.players.find((x) => x.id === t);
       return `<li><span class="n">${vs.length}</span><span class="t">${esc(p?.name)}<small>${vs.map((x) => esc(pname(x))).join(', ')}</small></span>
-        ${host && p && !p.out ? `<button class="btn small red" data-a="exile" data-id="${t}">Изгнать</button>` : ''}</li>`;
+        ${host && p && !p.out ? `<button class="btn small" data-a="exile" data-id="${t}">Изгнать</button>` : ''}</li>`;
     }).join('')}</ul>` : '<p class="hint">Никто не проголосовал.</p>'}
     ${host ? `<button class="btn small ghost" data-a="voteCancel">Скрыть итоги</button>` : ''}
   </section>`;
@@ -459,27 +470,29 @@ function vVote(st) {
 
 function vMe(st) {
   const me = st.me;
+  const goal = st.round === 1 ? 2 : 1;
   const rows = KEYS.map((k) => {
     const open = me.rev[k];
     return `<div class="row ${open ? '' : 'closed'}"><span class="lab">${NAME[k]}</span><span class="val">${esc(me.card[k])}</span>
       <span class="act">${open ? '<span class="mark">открыто</span>' : (me.out ? '' : `<button class="rv" data-a="reveal" data-k="${k}">Открыть</button>`)}</span></div>`;
   }).join('');
   const sp = me.sp.map((c, i) => `<div class="sp ${c.used ? 'used' : ''}"><p>${esc(c.t)}</p>
-    ${c.used ? '<span class="sp-done">сыграна</span>' : `<button class="btn small" data-a="special" data-i="${i}">Сыграть</button>`}</div>`).join('');
+    ${c.used ? '<span class="mark">сыграна</span>' : `<button class="btn small" data-a="special" data-i="${i}">Сыграть</button>`}</div>`).join('');
   return `<section class="card ${me.out ? 'out' : ''}">
-      ${me.out ? `<span class="stamp bad" data-id="${me.id}">Отказано</span>` : ''}
-      <div class="card-head ${me.out ? '' : 'free'}"><h2>${esc(me.name)}</h2></div>
+      ${me.out ? '<span class="flag">Изгнан</span>' : ''}
+      <div class="card-head ${me.out ? '' : 'free'}"><h2>${esc(me.name)}</h2>
+        ${me.out ? '' : `<span class="tag">в этом раунде открыто ${me.rr} из ${goal}</span>`}</div>
       ${rows}
     </section>
-    <p class="pinline">Закрытые карты видишь только ты. Если вылетишь, войди с тем же именем и PIN ${me.pin}.</p>
-    <h2 class="wall-h">Спецкарты</h2>
-    <p class="hint">Сыгранную карту увидят все, а ведущий выполнит её действие.</p>
+    <p class="pinline">Закрытые карты видишь только ты. Если вылетишь из игры, зайди с тем же именем и PIN ${me.pin}.</p>
+    <h2 class="sec-h">Спецкарты</h2>
+    <p class="hint">Сыграть можно в любой момент. Карту увидят все, а действие выполнит ведущий.</p>
     ${sp}`;
 }
 
 function vPlayers(st) {
   const sorted = [...st.players.filter((p) => !p.out), ...st.players.filter((p) => p.out)];
-  return `<p class="hint">Закрашено то, что игрок ещё не открыл.</p>` + sorted.map((p) => personCard(p, st)).join('');
+  return `<p class="hint" style="margin-top:4px">Серым закрыто то, что игрок ещё не показал.</p>` + sorted.map((p) => personCard(p, st)).join('');
 }
 
 function vBunker(st) {
@@ -488,18 +501,24 @@ function vBunker(st) {
       <h2>${esc(c.title)}</h2>
       <p>${esc(c.text)}</p>
       <dl class="facts"><div><dt>Сидеть в бункере</dt><dd>${esc(c.years)}</dd></div><div><dt>Выжило людей</dt><dd>${esc(c.alive)}</dd></div></dl>
+      <p class="tag" style="margin-bottom:6px">Что особенно важно для выживания</p>
+      <div class="needs">${c.needs.map((n) => `<span>${esc(st.needLabels[n])}</span>`).join('')}</div>
     </section>
     <section class="card">
       <h2>Бункер</h2>
       <dl class="facts"><div><dt>Площадь</dt><dd>${b.area} м²</dd></div><div><dt>Еды хватит на</dt><dd>${esc(b.food)}</dd></div></dl>
-      <h3 style="font-size:19px">Что внутри</h3>
+      <h3 style="font-size:19px">Что есть</h3>
       <ul>${b.rooms.map((r) => `<li>${esc(r)}</li>`).join('')}</ul>
+      <h3 style="font-size:19px">Проблемы</h3>
+      <ul>${b.problems.map((r) => `<li>${esc(r)}</li>`).join('')}</ul>
     </section>
-    <h2 class="wall-h">Как играем</h2>
-    <p>Каждый раунд все по очереди открывают одну карту и доказывают, что без них бункеру не выжить. В первом раунде все открывают профессию.</p>
-    <p>Потом обсуждение и голосование: кого не берём. Игра идёт, пока людей не останется столько, сколько мест.</p>
-    <p>Спецкарты можно сыграть в любой момент. Действие выполняет ведущий.</p>
-    <h2 class="wall-h">Журнал</h2>
+    ${st.events.length ? `<h2 class="sec-h">События</h2><ul class="journal">${[...st.events].reverse().map((e) => `<li>Раунд ${e.round}. ${esc(e.t)}</li>`).join('')}</ul>` : ''}
+    <h2 class="sec-h">Правила</h2>
+    <p>В первом раунде все открывают профессию и ещё одну карту. Дальше по одной карте за раунд. Каждый по очереди объясняет, почему без него бункеру не выжить.</p>
+    <p>Потом обсуждение и голосование. Сколько человек изгнать в этом раунде, написано вверху экрана.</p>
+    <p>Спецкарты играются в любой момент, их действие выполняет ведущий. Ведущий может вытянуть событие, которое поменяет расклад.</p>
+    <p>В финале игра проверит, хватает ли вам медицины, еды, техники и защиты, сможете ли вы продолжить род и не перегрызётесь ли друг с другом.</p>
+    <h2 class="sec-h">Журнал</h2>
     <ul class="journal">${[...st.log].reverse().map((l) => `<li>${esc(l.text)}</li>`).join('')}</ul>`;
 }
 
@@ -517,20 +536,23 @@ function vHost(st) {
   const notMe = ppl.filter((x) => x[0] !== st.me.id);
   fix('newHost', notMe.map((x) => x[0]));
   const v = st.vote;
-  return `<h2 class="wall-h" style="margin-top:8px">Ход игры</h2>
+  const left = st.players.filter((p) => !p.out).length - st.places;
+  return `<h2 class="sec-h" style="margin-top:8px">Ход игры</h2>
     <div class="grid2">
       <button class="btn" data-a="round">Следующий раунд</button>
-      ${!v ? '<button class="btn" data-a="voteStart">Начать голосование</button>'
+      ${!v ? '<button class="btn" data-a="voteStart">Голосование</button>'
         : v.open ? '<button class="btn" data-a="voteClose">Закрыть голосование</button>'
         : '<button class="btn ghost" data-a="voteCancel">Скрыть итоги</button>'}
     </div>
+    <button class="btn ghost" data-a="event">Вытянуть событие</button>
+    <p class="hint">Событие можно тянуть раз в раунд, после того как все открыли карты.</p>
     <div class="stepper"><span>Мест в бункере</span><button data-a="places" data-d="-1" aria-label="Меньше мест">−</button><b>${st.places}</b><button data-a="places" data-d="1" aria-label="Больше мест">+</button></div>
 
-    <h2 class="wall-h">Игроки</h2>
+    <h2 class="sec-h">Игроки</h2>
     <ul class="hlist">${st.players.map((p) => `<li><span class="${p.out ? 'gone' : ''}">${esc(p.name)}${p.out ? ' — снаружи' : ''}</span>
-      ${p.out ? `<button class="btn small ghost" data-a="restore" data-id="${p.id}">Вернуть</button>` : `<button class="btn small warn" data-a="exile" data-id="${p.id}">Изгнать</button>`}</li>`).join('')}</ul>
+      ${p.out ? `<button class="btn small ghost" data-a="restore" data-id="${p.id}">Вернуть</button>` : `<button class="btn small ghost" data-a="exile" data-id="${p.id}">Изгнать</button>`}</li>`).join('')}</ul>
 
-    <h2 class="wall-h">Действие спецкарты</h2>
+    <h2 class="sec-h">Действие спецкарты</h2>
     <p class="hint">Для карт про обмен, замену и открытие. Остальные спецкарты выполняйте на словах или кнопками выше.</p>
     <label class="field"><span>Что сделать</span><select data-tool="op">${opt(ops, t.op)}</select></label>
     <label class="field"><span>Какую карту</span><select data-tool="key">${opt(KEYS.map((k) => [k, NAME[k]]), t.key)}</select></label>
@@ -542,25 +564,35 @@ function vHost(st) {
       <button class="btn ghost" data-a="addRoom">Добавить комнату</button>
     </div>
 
-    <h2 class="wall-h">Ведущий</h2>
+    <h2 class="sec-h">Ведущий</h2>
     ${notMe.length ? `<label class="field"><span>Передать роль другому игроку</span><select data-tool="newHost">${opt(notMe, t.newHost)}</select></label>
     <button class="btn ghost" data-a="hostTo">Передать роль</button>` : ''}
-    <div style="margin-top:18px"><button class="btn red" data-a="finish">Закрыть двери и закончить игру</button></div>`;
+    <div style="margin-top:22px"><button class="btn" data-a="finish">Закрыть двери и узнать финал</button>
+    ${left > 0 ? `<p class="hint">Внутри пока на ${left} ${plural(left, 'человека', 'человека', 'человек')} больше, чем мест. Закрыть двери можно и сейчас.</p>` : ''}</div>`;
+}
+
+function statusText(st) {
+  const alive = st.players.filter((p) => !p.out).length;
+  const left = alive - st.places;
+  const reveal = st.round === 1 ? 'Откройте профессию и ещё одну карту.' : 'Откройте одну любую карту.';
+  const votes = left <= 0 ? 'Все внутри помещаются, ведущий может закрывать двери.'
+    : st.votesNow ? `Изгоняем в этом раунде: <b>${st.votesNow}</b>.` : 'В этом раунде без голосования.';
+  return `<b>Раунд ${st.round}${st.round <= st.rounds ? ` из ${st.rounds}` : ''}.</b> ${reveal} ${votes}<br><span class="tag">Мест ${st.places}, внутри ${alive}.</span>`;
 }
 
 function vGame(st) {
   const host = st.hostId === st.me.id;
   if (!host && S.tab === 'host') S.tab = 'me';
-  const alive = st.players.filter((p) => !p.out).length;
-  const left = alive - st.places;
   const last = st.log[st.log.length - 1];
   const body = S.tab === 'players' ? vPlayers(st) : S.tab === 'bunker' ? vBunker(st) : S.tab === 'host' ? vHost(st) : vMe(st);
   const tabs = [['me', 'Моя карта'], ['players', 'Игроки'], ['bunker', 'Бункер'], ...(host ? [['host', 'Ведущий']] : [])];
-  return `<header class="gbar">
-      <div class="top"><span class="brand">Бункер</span><span><span class="room">комната ${st.code}</span> <button class="link" data-a="exit" style="margin-left:10px">Выйти</button></span></div>
-      <p class="status">Раунд ${st.round}. В бункер попадут ${st.places} из ${alive}. ${left > 0 ? `Осталось изгнать ${left}.` : 'Все, кто внутри, помещаются — ведущий может закрывать двери.'}</p>
-      ${last ? `<p class="last">${esc(last.text)}</p>` : ''}
-    </header>
+  const showLast = last && !(st.event && last.text.startsWith('Событие'));
+  return `${header()}<div class="gtop">
+      <div class="meta"><span>Комната ${st.code}</span><button class="link" data-a="exit">Выйти</button></div>
+      <p class="status">${statusText(st)}</p>
+      ${st.event ? `<div class="event"><h3>Событие</h3><p>${esc(st.event.t)}</p></div>` : ''}
+      ${showLast ? `<p class="last">${esc(last.text)}</p>` : ''}
+    </div>
     <main class="wrap">${vVote(st)}${body}</main>
     <nav class="tabs">${tabs.map(([k, t]) => `<button class="${S.tab === k ? 'on' : ''}" data-a="tab" data-t="${k}">${t}</button>`).join('')}</nav>`;
 }
@@ -568,15 +600,21 @@ function vGame(st) {
 function vFinal(st) {
   const host = st.hostId === st.me.id;
   const inside = st.players.filter((p) => !p.out), outside = st.players.filter((p) => p.out);
+  const v = st.verdict;
   const c = st.world.cat;
-  return `<main class="wrap">
-    <div class="top"><span class="brand">Бункер</span><button class="link" data-a="exit">Выйти</button></div>
-    <h1 class="final-h">Двери бункера закрылись</h1>
-    <p class="lead">${esc(c.title)}. Сидеть внутри ${esc(c.years)}. Обсудите, выживет ли эта компания.</p>
+  return `${header()}<main class="wrap">
+    <div class="meta"><span>Комната ${st.code}</span><button class="link" data-a="exit">Выйти</button></div>
+    <h1 class="final-h">Двери закрылись</h1>
+    <p class="lead">${esc(c.title)}. Сидеть внутри ${esc(c.years)}.</p>
+    ${v ? `<section class="verdict">
+      <h2>${esc(v.title)}</h2>
+      <p class="story">${esc(v.story)}</p>
+      ${v.checks.map((x) => `<div class="check"><span class="sign">${x.ok ? '+' : '−'}</span><span><b>${esc(x.label)}${x.need ? ', важно при этой катастрофе' : ''}</b>${esc(x.text)}</span></div>`).join('')}
+    </section>` : ''}
     ${host ? '<div style="margin:18px 0"><button class="btn" data-a="again">Сыграть ещё раз с теми же</button></div>' : ''}
-    <h2 class="wall-h">В бункере: ${inside.length}</h2>
+    <h2 class="sec-h">В бункере: ${inside.length}</h2>
     ${inside.map((p) => personCard(p, st, { all: true, ok: true })).join('')}
-    ${outside.length ? `<h2 class="wall-h">Снаружи: ${outside.length}</h2>${outside.map((p) => personCard(p, st, { all: true })).join('')}` : ''}
+    ${outside.length ? `<h2 class="sec-h">Снаружи: ${outside.length}</h2>${outside.map((p) => personCard(p, st, { all: true })).join('')}` : ''}
   </main>`;
 }
 

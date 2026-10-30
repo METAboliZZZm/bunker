@@ -61,7 +61,25 @@ const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
 async function load(code) {
   const raw = await redis('GET', sKey(code));
   if (!raw) throw new HttpError(404, 'Комната не найдена. Проверь код или создай новую игру.');
-  return JSON.parse(raw);
+  return migrate(JSON.parse(raw));
+}
+
+// Комнаты, начатые на старой версии, получают недостающие карты (например, «Семья»)
+function migrate(s) {
+  for (const p of s.players || []) {
+    p.rev ||= {};
+    if (!p.card) continue;
+    for (const k of DEAL) {
+      if (p.card[k]) continue;
+      // выбор зависит только от id игрока, поэтому одинаков при каждом чтении, даже до сохранения
+      const used = new Set(s.players.map((x) => x.card?.[k]?.t));
+      const pool = D[k].filter((c) => fits(c, p.card.bio || {}) && !used.has(c.t));
+      let h = 0;
+      for (const ch of p.id + k) h = (h * 31 + ch.charCodeAt(0)) >>> 0;
+      p.card[k] = copy(pool.length ? pool[h % pool.length] : D[k][h % D[k].length]);
+    }
+  }
+  return s;
 }
 async function save(s) {
   s.v = (s.v || 0) + 1;
@@ -104,7 +122,7 @@ const years = (n) => `${n} ${plural(n, 'год', 'года', 'лет')}`;
 // «Смел{ый|ая}» → форма для пола владельца карты
 const gform = (t, g) => String(t).replace(/\{([^|{}]*)\|([^{}]*)\}/g, (_, m, f) => (g === 'f' ? f : m));
 const gOf = (p) => p.card?.bio?.g || 'm';
-const text = (p, k) => gform(p.card[k].t, gOf(p));
+const text = (p, k) => (p.card?.[k] ? gform(p.card[k].t, gOf(p)) : '');
 const copy = (c) => ({ t: c.t, v: c.v, tags: [...c.tags] });
 
 // ---------- Генерация карт ----------
@@ -268,7 +286,7 @@ function freshCard(s, key, p) {
     const pool = D.prof.filter((c) => !names.has(c.t));
     return genProf(pick(pool.length ? pool : D.prof), bio.age);
   }
-  const usedT = new Set(s.players.filter((x) => x.card).map((x) => x.card[key].t));
+  const usedT = new Set(s.players.filter((x) => x.card).map((x) => x.card[key]?.t));
   const pool = D[key].filter((c) => fits(c, bio) && !usedT.has(c.t));
   return copy(pick(pool.length ? pool : D[key].filter((c) => fits(c, bio))));
 }

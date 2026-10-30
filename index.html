@@ -132,6 +132,7 @@ select{width:100%;font:16px "Helvetica Neue",Helvetica,Arial,sans-serif;border:1
 .val{grid-column:1;font-size:16px;line-height:1.35;overflow-wrap:anywhere;margin-top:3px}
 .row .act{grid-column:2;grid-row:1/3;align-self:center}
 .row.closed .val{color:var(--mute)}
+.val .sub{display:block;font-size:13px;line-height:1.3;color:var(--mute);margin-top:2px}
 .rv{border:1px solid var(--fg);background:var(--bg);color:var(--fg);padding:7px 12px;font-size:14px;font-weight:700}
 .mark{font-size:13px;color:var(--mute)}
 .redact{display:inline-block;height:14px;background:var(--bar);vertical-align:-2px}
@@ -233,6 +234,11 @@ function saveSess(s) { try { localStorage.setItem(STORE, JSON.stringify(s)); } c
 const joinUrl = () => `${location.origin}/?room=${S.st.code}`;
 const val = (id) => (document.getElementById(id)?.value || '').trim();
 const footer = () => `<footer class="foot"><a class="made" href="${SITE}" target="_blank" rel="noopener">made by <b>WeAreAble</b></a></footer>`;
+function cardVal(k, v) {
+  const t = String(v ?? '');
+  const i = k === 'prof' ? t.indexOf(', ') : -1;
+  return i > 0 ? `${esc(t.slice(0, i))}<small class="sub">${esc(t.slice(i + 2))}</small>` : esc(t);
+}
 const pname = (id) => S.st.players.find((p) => p.id === id)?.name || '?';
 // шапка живёт вне перерисовки, чтобы бегущая строка не дёргалась
 function mountHeader() {
@@ -491,7 +497,7 @@ function rowsOther(p, all) {
   return KEYS.map((k) => {
     const open = all || p.rev[k];
     return `<div class="row"><span class="lab">${NAME[k]}</span>${open && p.card[k] !== undefined
-      ? `<span class="val">${esc(p.card[k])}</span>`
+      ? `<span class="val">${cardVal(k, p.card[k])}</span>`
       : `<span class="val"><i class="redact" style="width:${hw(p.id + k)}%"></i></span>`}</div>`;
   }).join('');
 }
@@ -544,7 +550,7 @@ function vMe(st) {
   const goal = st.round === 1 ? 2 : 1;
   const rows = KEYS.map((k) => {
     const open = me.rev[k];
-    return `<div class="row ${open ? '' : 'closed'}"><span class="lab">${NAME[k]}</span><span class="val">${esc(me.card[k])}</span>
+    return `<div class="row ${open ? '' : 'closed'}"><span class="lab">${NAME[k]}</span><span class="val">${cardVal(k, me.card[k])}</span>
       <span class="act">${open ? '<span class="mark">открыто</span>' : (me.out ? '' : `<button class="rv" data-a="reveal" data-k="${k}">Открыть</button>`)}</span></div>`;
   }).join('');
   const sp = me.sp.map((c, i) => `<div class="sp ${c.used ? 'used' : ''}"><p>${esc(c.t)}</p>

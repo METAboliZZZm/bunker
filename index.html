@@ -439,11 +439,11 @@ function render() {
 function vHome() {
   const join = `
   <section>
-    <h2>Войти по коду</h2>
+    <h2>Войти по коду в комнату</h2>
     <label class="field"><span>Код комнаты</span><input id="jCode" inputmode="numeric" maxlength="4" autocomplete="off" placeholder="0000" value="${esc(S.prefill)}"></label>
     <label class="field"><span>Твоё имя</span><input id="jName" maxlength="20" autocomplete="nickname" placeholder="Как тебя зовут"></label>
     <label class="field"><span>PIN — только если возвращаешься в начатую игру</span><input id="jPin" inputmode="numeric" maxlength="4" autocomplete="off"></label>
-    <button class="btn" data-a="join">Войти</button>
+    <button class="btn" data-a="join">Войти в комнату</button>
   </section>`;
   const create = `
   <section>

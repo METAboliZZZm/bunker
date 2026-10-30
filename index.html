@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <meta name="theme-color" content="#000000">
 <meta name="description" content="Бункер — игра для компании. Каждый играет со своего телефона.">
-<title>WeAreAble Бункер</title>
+<title>WEAREABLE BOONKER!</title>
 <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' fill='black'/><rect x='22' y='22' width='56' height='56' fill='none' stroke='white' stroke-width='10'/></svg>">
 <script src="https://cdn.jsdelivr.net/npm/qrcode-generator@1.4.4/qrcode.js" defer></script>
 <style>
@@ -79,9 +79,12 @@ select{width:100%;font:16px "Helvetica Neue",Helvetica,Arial,sans-serif;border:1
 .seg button.on{background:var(--fg);color:var(--bg)}
 
 /* главная */
-.logo{font-size:clamp(38px,11vw,56px);line-height:1;letter-spacing:-.035em;margin:40px 0 16px}
+.logo{margin:36px 0 20px;line-height:0}
+/* каждая строка растянута ровно на ширину колонки и чуть сжата по горизонтали */
+.logo svg{display:block;width:100%;height:auto;overflow:visible}
+.logo svg+svg{margin-top:3%}
+.logo text{fill:var(--fg);font-family:"Helvetica Neue",Helvetica,Arial,sans-serif;font-weight:700;font-size:200px}
 .lead{font-size:20px;line-height:1.3;margin:0 0 6px}
-.tagline{font-size:20px;font-weight:700;letter-spacing:-.02em;margin:-6px 0 14px}
 .home section{margin-top:34px}
 .home h2{font-size:26px;margin-bottom:14px}
 .rules{padding-left:20px;margin:0}
@@ -419,9 +422,11 @@ function vHome() {
     <p class="hint">Ты станешь ведущим и покажешь друзьям код или QR.</p>
   </section>`;
   return `<main class="wrap home">
-    <h1 class="logo">WeAreAble Бункер</h1>
-    <p class="tagline">На всех мест не хватит</p>
-    <p class="lead">Катастрофа уже случилась, а в бункер попадёт только половина из вас. Докажите, что без вас не выжить.</p>
+    <h1 class="logo" aria-label="WEAREABLE BOONKER!">
+      <svg viewBox="0 0 1000 144" aria-hidden="true"><text x="0" y="144" textLength="1000" lengthAdjust="spacingAndGlyphs">WEAREABLE</text></svg>
+      <svg viewBox="0 0 1000 144" aria-hidden="true"><text x="0" y="144" textLength="1000" lengthAdjust="spacingAndGlyphs">BOONKER!</text></svg>
+    </h1>
+    <p class="lead">Катастрофа уже случилась. Благо у нас есть бункер, но на всех мест не хватит. Докажи, что без тебя не выжить.</p>
     ${S.prefill ? join + create : create + join}
     <section>
       <h2>Как играть</h2>

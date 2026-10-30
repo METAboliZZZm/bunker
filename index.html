@@ -29,7 +29,7 @@ p{margin:0 0 10px}
 /* лента маскотов во всю ширину (телефоны) */
 .strip{display:block;position:relative;height:40px;overflow:hidden;text-decoration:none;
   -webkit-mask-image:linear-gradient(90deg,transparent,#000 14%,#000 86%,transparent);mask-image:linear-gradient(90deg,transparent,#000 14%,#000 86%,transparent)}
-.strip-track{display:flex;width:max-content;height:100%;animation:strip 40s linear infinite}
+.strip-track{display:flex;width:max-content;height:100%;animation:strip 160s linear infinite}
 .strip-track img{display:block;height:40px;width:auto}
 @keyframes strip{from{transform:translateX(-50%)}to{transform:translateX(0)}}
 .strip-label{position:absolute;top:0;bottom:0;left:50%;transform:translateX(-50%);display:flex;align-items:center;padding:0 10px;background:var(--bg);font-weight:700;font-size:18px;letter-spacing:-.02em;white-space:nowrap}
@@ -44,7 +44,7 @@ p{margin:0 0 10px}
 .mascot-col{position:fixed;top:0;bottom:0;width:var(--mascot-size);overflow:hidden;pointer-events:none;z-index:0;display:none;justify-content:center}
 .mascot-col.l{left:0}
 .mascot-col.r{right:0}
-.mascot-track{display:flex;flex-direction:column;align-items:center;animation:mascotFlow 120s linear infinite;will-change:transform}
+.mascot-track{display:flex;flex-direction:column;align-items:center;animation:mascotFlow 75s linear infinite;will-change:transform}
 .mascot-track img{display:block;height:var(--mascot-unit);width:auto;max-width:calc(var(--mascot-size) - 24px);object-fit:contain;padding-bottom:12vh;box-sizing:content-box}
 .mascot-col.r img{transform:scaleX(-1)}
 @keyframes mascotFlow{to{transform:translateY(-50%)}}
@@ -80,7 +80,7 @@ select{width:100%;font:16px "Helvetica Neue",Helvetica,Arial,sans-serif;border:1
 
 /* главная */
 .logo{font-size:clamp(38px,11vw,56px);line-height:1;letter-spacing:-.035em;margin:40px 0 16px}
-.lead{font-size:20px;line-height:1.3;max-width:28ch;margin:0 0 6px}
+.lead{font-size:20px;line-height:1.3;margin:0 0 6px}
 .tagline{font-size:20px;font-weight:700;letter-spacing:-.02em;margin:-6px 0 14px}
 .home section{margin-top:34px}
 .home h2{font-size:26px;margin-bottom:14px}

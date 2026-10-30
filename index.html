@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <meta name="theme-color" content="#000000">
 <meta name="description" content="Бункер — игра для компании. Каждый играет со своего телефона.">
-<title>Бункер — WeAreAble</title>
+<title>WeAreAble Бункер</title>
 <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' fill='black'/><rect x='22' y='22' width='56' height='56' fill='none' stroke='white' stroke-width='10'/></svg>">
 <script src="https://cdn.jsdelivr.net/npm/qrcode-generator@1.4.4/qrcode.js" defer></script>
 <style>
@@ -24,7 +24,15 @@ p{margin:0 0 10px}
 :focus-visible{outline:2px solid var(--fg);outline-offset:2px}
 
 /* шапка */
-.hdr{max-width:560px;margin:0 auto;padding:14px 16px;display:flex;justify-content:space-between;align-items:baseline;gap:12px}
+.hdr{max-width:560px;margin:0 auto;padding:12px 16px;display:flex;justify-content:space-between;align-items:center;gap:12px}
+.hdr-r{display:flex;align-items:center;gap:10px;min-width:0}
+/* бегущая строка из маскотов */
+.ticker{width:132px;height:24px;overflow:hidden;flex:none;
+  -webkit-mask-image:linear-gradient(90deg,transparent,#000 22%,#000 78%,transparent);mask-image:linear-gradient(90deg,transparent,#000 22%,#000 78%,transparent)}
+.ticker-track{display:flex;width:max-content;animation:ticker 9s linear infinite}
+.ticker img{display:block;width:24px;height:24px;margin-right:-1px}
+@keyframes ticker{to{transform:translateX(-50%)}}
+@media (prefers-reduced-motion:reduce){.ticker-track{animation:none}}
 .brand{font-weight:700;font-size:20px;letter-spacing:-.02em}
 .made{font-size:13px;color:var(--mute);text-decoration:none;white-space:nowrap}
 .made b{color:var(--fg)}
@@ -49,7 +57,7 @@ select{width:100%;font:16px "Helvetica Neue",Helvetica,Arial,sans-serif;border:1
 .seg button.on{background:var(--fg);color:var(--bg)}
 
 /* главная */
-.logo{font-size:clamp(76px,26vw,140px);line-height:.82;letter-spacing:-.06em;margin:28px 0 18px}
+.logo{font-size:clamp(38px,11vw,56px);line-height:1;letter-spacing:-.035em;margin:40px 0 16px}
 .lead{font-size:20px;line-height:1.3;max-width:28ch;margin:0 0 6px}
 .home section{margin-top:34px}
 .home h2{font-size:26px;margin-bottom:14px}
@@ -167,6 +175,7 @@ select{width:100%;font:16px "Helvetica Neue",Helvetica,Arial,sans-serif;border:1
 </head>
 <body>
 <div id="net"></div>
+<header class="hdr" id="hdr"></header>
 <div id="app"></div>
 <div id="toast" role="status" aria-live="polite"></div>
 <script>
@@ -194,7 +203,13 @@ function saveSess(s) { try { localStorage.setItem(STORE, JSON.stringify(s)); } c
 const joinUrl = () => `${location.origin}/?room=${S.st.code}`;
 const val = (id) => (document.getElementById(id)?.value || '').trim();
 const pname = (id) => S.st.players.find((p) => p.id === id)?.name || '?';
-const header = (brand = true) => `<header class="hdr"><span class="brand">${brand ? 'Бункер' : ''}</span><a class="made" href="${SITE}" target="_blank" rel="noopener">made by <b>WeAreAble</b></a></header>`;
+// шапка живёт вне перерисовки, чтобы бегущая строка не дёргалась
+function mountHeader() {
+  const m = '<img src="/mascot.svg" alt="">'.repeat(12);
+  document.getElementById('hdr').innerHTML = `<span class="brand" id="brand"></span>
+    <span class="hdr-r"><span class="ticker" aria-hidden="true"><span class="ticker-track">${m}${m}</span></span>
+    <a class="made" href="${SITE}" target="_blank" rel="noopener">made by <b>WeAreAble</b></a></span>`;
+}
 
 async function api(action, data = {}) {
   const body = { action, ...(S.sess || {}), ...data };
@@ -344,9 +359,11 @@ document.addEventListener('visibilitychange', () => { if (!document.hidden) { S.
 /* ---------- отрисовка ---------- */
 function render() {
   S.pending = false;
+  const brand = document.getElementById('brand');
+  if (brand) brand.textContent = S.sess ? 'Бункер' : '';
   const st = S.st;
   if (!S.sess) app.innerHTML = vHome();
-  else if (!st) app.innerHTML = header() + '<p class="center">Подключаемся к комнате…</p>';
+  else if (!st) app.innerHTML = '<p class="center">Подключаемся к комнате…</p>';
   else if (st.phase === 'lobby') app.innerHTML = vLobby(st);
   else if (st.phase === 'game') app.innerHTML = vGame(st);
   else app.innerHTML = vFinal(st);
@@ -373,8 +390,8 @@ function vHome() {
     <button class="btn" data-a="create">Создать комнату</button>
     <p class="hint">Ты станешь ведущим и покажешь друзьям код или QR.</p>
   </section>`;
-  return `${header(false)}<main class="wrap home">
-    <h1 class="logo">Бункер</h1>
+  return `<main class="wrap home">
+    <h1 class="logo">WeAreAble Бункер</h1>
     <p class="lead">Катастрофа уже случилась. Мест в убежище хватит только половине из вас.</p>
     ${S.prefill ? join + create : create + join}
     <section>
@@ -395,7 +412,7 @@ function vLobby(st) {
   const list = st.players.map((p) => `<li><span>${esc(p.name)}${p.id === st.hostId ? '<span class="who">ведущий</span>' : ''}${p.id === st.me.id ? '<span class="who">это ты</span>' : ''}</span>
     ${host && p.id !== st.me.id ? `<button class="x" data-a="kick" data-id="${p.id}">убрать</button>` : ''}</li>`).join('');
   const orient = st.opts.orient !== false;
-  return `${header()}<main class="wrap">
+  return `<main class="wrap">
     <div class="meta" style="border:0;padding-top:0"><span>Комната</span><button class="link" data-a="exit">Выйти</button></div>
     <div class="code">${st.code}</div>
     <div class="joinbox">
@@ -587,7 +604,7 @@ function vGame(st) {
   const body = S.tab === 'players' ? vPlayers(st) : S.tab === 'bunker' ? vBunker(st) : S.tab === 'host' ? vHost(st) : vMe(st);
   const tabs = [['me', 'Моя карта'], ['players', 'Игроки'], ['bunker', 'Бункер'], ...(host ? [['host', 'Ведущий']] : [])];
   const showLast = last && !(st.event && last.text.startsWith('Событие'));
-  return `${header()}<div class="gtop">
+  return `<div class="gtop">
       <div class="meta"><span>Комната ${st.code}</span><button class="link" data-a="exit">Выйти</button></div>
       <p class="status">${statusText(st)}</p>
       ${st.event ? `<div class="event"><h3>Событие</h3><p>${esc(st.event.t)}</p></div>` : ''}
@@ -602,7 +619,7 @@ function vFinal(st) {
   const inside = st.players.filter((p) => !p.out), outside = st.players.filter((p) => p.out);
   const v = st.verdict;
   const c = st.world.cat;
-  return `${header()}<main class="wrap">
+  return `<main class="wrap">
     <div class="meta"><span>Комната ${st.code}</span><button class="link" data-a="exit">Выйти</button></div>
     <h1 class="final-h">Двери закрылись</h1>
     <p class="lead">${esc(c.title)}. Сидеть внутри ${esc(c.years)}.</p>
@@ -621,6 +638,7 @@ function vFinal(st) {
 /* ---------- старт ---------- */
 S.prefill = (new URLSearchParams(location.search).get('room') || '').replace(/\D/g, '').slice(0, 4);
 S.sess = loadSess();
+mountHeader();
 if (S.sess && S.prefill && S.sess.code !== S.prefill) { try { localStorage.removeItem(STORE); } catch {} S.sess = null; }
 render();
 if (S.sess) poll();

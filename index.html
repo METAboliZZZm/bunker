@@ -37,8 +37,11 @@ p{margin:0 0 10px}
 .strip-label::before{right:100%;background:linear-gradient(90deg,transparent,var(--bg))}
 .strip-label::after{left:100%;background:linear-gradient(270deg,transparent,var(--bg))}
 @media (max-width:899px){
-  .hdr{display:block;max-width:none;padding:10px 0 4px}
+  /* шапка с лентой маскотов закреплена сверху, как нижние вкладки */
+  body .hdr{display:block;max-width:none;position:fixed;top:0;left:0;right:0;z-index:6;background:var(--bg);
+    padding:calc(env(safe-area-inset-top,0px) + 8px) 0 8px;border-bottom:1px solid var(--line)}
   .hdr .brand{display:none}
+  body{padding-top:calc(env(safe-area-inset-top,0px) + 57px)}
 }
 /* колонки маскотов по краям (компьютер), как на weareable.ru */
 .mascot-col{position:fixed;top:0;bottom:0;width:var(--mascot-size);overflow:hidden;pointer-events:none;z-index:0;display:none;justify-content:center}

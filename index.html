@@ -142,6 +142,10 @@ select{width:100%;font:16px "Helvetica Neue",Helvetica,Arial,sans-serif;border:1
 .compact .row{grid-template-columns:92px 1fr;padding:8px 0;align-items:baseline}
 .compact .lab{grid-row:1}
 .compact .val{grid-column:2;grid-row:1;margin:0;font-size:15px}
+.card-vote{display:flex;justify-content:space-between;align-items:center;gap:12px;border-top:1px solid var(--line);padding:10px 0 12px}
+.card-vote .who-v{font-size:14px;color:var(--mute)}
+.card-vote .who-v b{color:var(--fg)}
+.vbtn small{display:block;font-weight:400;font-size:13px;margin-top:2px}
 .sp-used{font-size:14px;color:var(--mute);border-top:1px solid var(--line);padding:9px 0 11px;margin:0}
 .pinline{font-size:14px;color:var(--mute);margin:-4px 0 0}
 
@@ -514,7 +518,26 @@ function personCard(p, st, opts = {}) {
     <div class="card-head ${flag ? '' : 'free'}"><h3>${esc(p.name)}</h3>${tags ? `<span class="tag">${tags}</span>` : ''}</div>
     ${rowsOther(p, opts.all)}
     ${p.sp.length ? `<p class="sp-used">Сыграно: ${p.sp.map((t) => `«${esc(t)}»`).join(', ')}</p>` : ''}
+    ${cardVote(p, st)}
   </section>`;
+}
+
+// Открытое голосование: на карточке видно, кто голосует против игрока, и можно отдать голос
+function votersAgainst(st, id) {
+  const v = st.vote;
+  if (!v?.votes) return [];
+  return Object.entries(v.votes).filter(([, t]) => t === id).map(([voter]) => pname(voter));
+}
+function cardVote(p, st) {
+  const v = st.vote;
+  if (!v?.open || p.out || st.phase !== 'game') return '';
+  const against = votersAgainst(st, p.id);
+  const can = !st.me.out && p.id !== st.me.id;
+  const mine = v.mine === p.id;
+  return `<div class="card-vote">
+    <span class="who-v">${against.length ? `Против: <b>${against.map(esc).join(', ')}</b>` : 'Голосов против нет'}</span>
+    ${can ? `<button class="btn small ${mine ? '' : 'ghost'}" data-a="vote" data-id="${p.id}">${mine ? 'Твой голос' : 'Проголосовать'}</button>` : ''}
+  </div>`;
 }
 
 function vVote(st) {
@@ -526,9 +549,10 @@ function vVote(st) {
     const targets = alive.filter((p) => p.id !== st.me.id);
     return `<section class="vote">
       <h3>Голосование: кого не берём</h3>
-      <p class="hint" style="margin:0">Проголосовали ${v.voted} из ${v.total}. Итоги увидят все, когда ведущий закроет голосование.</p>
+      <p class="hint" style="margin:0">Проголосовали ${v.voted} из ${v.total}. Голосование открытое: все видят, кто за кого. Голос можно поменять, пока ведущий не закрыл голосование.</p>
       ${st.me.out ? '<p class="hint">Ты снаружи и не голосуешь.</p>'
-        : `<div class="vgrid">${targets.map((p) => `<button class="vbtn ${v.mine === p.id ? 'on' : ''}" data-a="vote" data-id="${p.id}">${esc(p.name)}</button>`).join('')}</div>`}
+        : `<div class="vgrid">${targets.map((p) => { const a = votersAgainst(st, p.id); return `<button class="vbtn ${v.mine === p.id ? 'on' : ''}" data-a="vote" data-id="${p.id}">${esc(p.name)}${a.length ? `<small>${a.length} ${plural(a.length, 'голос', 'голоса', 'голосов')}</small>` : ''}</button>`; }).join('')}</div>`}
+      ${v.votes && Object.keys(v.votes).length ? `<p class="hint" style="margin:12px 0 0">${Object.entries(v.votes).map(([a, t]) => `${esc(pname(a))} → ${esc(pname(t))}`).join(', ')}</p>` : ''}
       ${host ? `<div class="grid2" style="margin-top:12px"><button class="btn small" data-a="voteClose">Закрыть и показать</button><button class="btn small ghost" data-a="voteCancel">Отменить</button></div>` : ''}
     </section>`;
   }

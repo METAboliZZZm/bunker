@@ -372,7 +372,7 @@ function view(s, me) {
   let vote = null;
   if (s.vote) {
     vote = s.vote.open
-      ? { open: true, voted: Object.keys(s.vote.votes).length, total: alive.length, mine: s.vote.votes[me.id] || null }
+      ? { open: true, voted: Object.keys(s.vote.votes).length, total: alive.length, mine: s.vote.votes[me.id] || null, votes: s.vote.votes }
       : { open: false, votes: s.vote.votes };
   }
   const cardOf = (p, full) => {
